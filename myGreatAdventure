@@ -1,0 +1,134 @@
+using System;
+
+namespace myGreatAdventure
+{
+    class versionOne
+    {
+        static void Main(string[] args)
+        {
+            int lives = 3, health = 10, round = 0;
+            Random r = new Random();
+            bool win = false;
+            Console.Write("What is the name of this brave hero, that dares challenge the Minotaur? ");
+            string name = Console.ReadLine();
+            Console.WriteLine("Maze of the Minotaur!");
+
+            initValues(ref lives, ref health, r);
+
+            while (lives > 0 && health > 0 && !win)
+            {
+                round++;
+                Console.WriteLine("\n~~~~~~~~~~~~ Round " + round + " ~~~~~~~~~~~~~~~~~~~~~~~~~");
+                Console.WriteLine("Lives: " + lives + " Health: " + health);
+
+                if (round >= 15)
+                {
+                    Console.WriteLine("The Minotaur is tired and falls asleep. You can escape!");
+                    win = true;
+                }
+                else
+                {
+                    int direction = chooseDirection();
+                    if (direction == 1)
+                        ActionEncounter(r.Next(4), ref lives, ref health);
+                    else
+                        ActionEncounter(r.Next(10), ref lives, ref health);
+
+                    checkResults(ref round, ref lives, ref health, ref win);
+                }
+            }
+
+            if (!win)
+            {
+                Console.WriteLine("You were unable to escape the labyrinth. Game over!");
+            }
+            else
+            {
+                Console.WriteLine("Congratulations! You have successfully escaped the labyrinth!");
+            }
+        }
+
+        private static void checkResults(ref int round, ref int lives, ref int health, ref bool win)
+        {
+            round++;
+            if (round >= 15)
+            {
+                win = true;
+            }
+        }
+
+        private static void ActionEncounter(int v, ref int lives, ref int health)
+        {
+            switch (v)
+            {
+                case 0:
+                    Console.WriteLine("You stepped into a hidden trap and injured yourself.");
+                    Console.WriteLine("You lost 2 units of health.");
+                    health -= 2;
+                    break;
+                case 1:
+                    Console.WriteLine("You found a healing potion and regained some health.");
+                    Console.WriteLine("You gained 3 units of health.");
+                    health += 3;
+                    break;
+                case 2:
+                    Console.WriteLine("You stumbled upon a mystical artifact that protected you from harm.");
+                    Console.WriteLine("You gained 6 units of health.");
+                    health += 6;
+                    break;
+                case 3:
+                    Console.WriteLine("You encountered a dead end and lost precious time.");
+                    Console.WriteLine("You lost 1 life.");
+                    lives -= 1;
+                    break;
+                case 4:
+                    Console.WriteLine("You discovered a hidden shortcut and evaded the Minotaur.");
+                    Console.WriteLine("You gained 2 units of health and the Minotaur slowed down.");
+                    health += 2;
+                    break;
+                case 5:
+                    Console.WriteLine("You found a magical talisman that shields you from harm.");
+                    Console.WriteLine("You gained 2 units of health.");
+                    health += 2;
+                    break;
+                case 6:
+                    Console.WriteLine("You cleverly distracted the Minotaur with a decoy and bought some time.");
+                    Console.WriteLine("You lost 1 unit of health but the Minotaur slowed down.");
+                    health -= 1;
+                    break;
+                case 7:
+                    Console.WriteLine("You stumbled upon a mysterious fountain that restores your vitality.");
+                    Console.WriteLine("You gained 4 units of health and 3 lives.");
+                    health += 4;
+                    lives += 3;
+                    break;
+                case 8:
+                    Console.WriteLine("You discovered ancient runes that weaken the Minotaur's pursuit.");
+                    Console.WriteLine("You gained 1 unit of health and the Minotaur slowed down.");
+                    health += 1;
+                    break;
+                default:
+                    Console.WriteLine("You navigated through the labyrinth without any trouble.");
+                    break;
+            }
+        }
+
+        private static int chooseDirection()
+        {
+            Console.WriteLine("Choose your direction: enter 1 for left or 2 for right");
+            int direction = int.Parse(Console.ReadLine());
+            while (direction != 1 && direction != 2)
+            {
+                Console.WriteLine("You entered an invalid number. Please enter 1 for left or 2 for right");
+                direction = int.Parse(Console.ReadLine());
+            }
+            return direction;
+        }
+
+        private static void initValues(ref int lives, ref int health, Random r)
+        {
+            lives = r.Next(6) + 1; // Random number of lives between 1 and 6
+            health = r.Next(11) + 5; // Random health between 5 and 15
+        }
+    }
+}
